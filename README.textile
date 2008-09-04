@@ -12,7 +12,7 @@ You must have Shoes setup and run the app via Shoes. I am having errors with the
   cd aglet
   shoes aglet.rb
 
-When saving your user credentials, you will probably notice that switching to the timeline doesn't exactly work. Restart the app and you are good to go. Sorry, looking into that one.
+You will probably note that switching to the public timeline doesn't work. And that when the app tries to reload the timeline as it sits there twittering the UI gets all kinds of fucked up. Working on that, yeknow.
 
 Oh, and growling support is quite primitive.
 
