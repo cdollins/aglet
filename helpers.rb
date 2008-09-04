@@ -78,7 +78,7 @@ module Helpers
   
   # TODO subclass Shoes::EditLine ?
   def password_line(value, options = {})
-    edit_line "*" * value.size, options do |pw|
+    edit_line "*" * value.to_s.size, options do |pw|
       def pw.password_text
         @password_text ||= ""
       end
