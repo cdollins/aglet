@@ -57,14 +57,10 @@ class Aglet < Shoes
   end
   
   def reload_timeline
-    # info "reloading timeline"
     load_timeline
     
     # TODO move to load_timeline ?
-    if @timeline.empty?
-      # warn "timeline reloaded empty, Twitter is probably over capacity"
-      @timeline = [fail_status] + load_timeline_from_cache
-    end
+    @timeline = [fail_status] + load_timeline_from_cache if @timeline.empty?
     
     @timeline_stack.clear { populate_timeline }
     
@@ -82,10 +78,12 @@ class Aglet < Shoes
       
       timeline = [status] + @timeline[0..-2]
       update_fixture_file timeline
-      reload_timeline
+      # reload_timeline
+      visit "/timeline"
     else
       @new_status = twitter_api { @twitter.update @status.text }
-      reload_timeline
+      # reload_timeline
+      visit "/timeline"
     end
     
     reset_status
@@ -109,8 +107,7 @@ class Aglet < Shoes
         unless @last_user and @last_user.id == @current_user.id
           stack :width => 45 do
             avatar_for status.user
-            para link_to_profile(status.user), :size => 7, :align => "right",
-              :margin => [0,0,5,5]
+            para link_to_profile(status.user), :size => 8, :align => "right", :margin => [0,0,5,0]
           end
         end
       end
@@ -133,7 +130,7 @@ class Aglet < Shoes
   end
   
   def setup_cred
-    @cred_path = File.expand_path("~/.aglet_cred")
+    @cred_path = File.expand_path "~/.aglet_cred"
     @cred = File.exist?(@cred_path) ? File.readlines(@cred_path).map(&:strip) : []
   end
   
@@ -141,26 +138,25 @@ class Aglet < Shoes
     setup_cred
     
     clear do
-      background fail_whale_blue
-    
+      background fail_to_white
+      
       para "SETUP"
-    
+      
       stack :margin_bottom => 5 do
         label "username"
         @username = edit_line @cred.first
-    
+        
         label "password"
         @password = password_line @cred.last
       end
-    
+      
       flow do
         button "save", :margin_right => 5 do
           File.open(@cred_path, "w+") { |f| f.puts @username.text, @password.password_text }
-          info  "Saved #{@username.text.inspect} and #{@password.password_text.inspect}"
           alert "Thank you, this info is now stored at #{@cred_path}"
           visit "/timeline"
         end
-      
+        
         button "cancel" do
           visit "/timeline"
         end
@@ -180,14 +176,14 @@ class Aglet < Shoes
     
     clear do
       background white
-    
+      
       # Longer entries will be published in full but truncated for mobile devices.
       recommended_status_length = 140
-    
-      @form = flow :margin => [0,0,0,5] do
-        background fail_whale_blue
       
-        @status = edit_box :width => -(55 + gutter), :height => 35, :margin => [5,5,5,0] do |s|
+      @form = flow :margin => [0,0,0,5] do
+        background fail_to_white
+        
+        @status = edit_box :width => -(10 + gutter), :height => 35, :margin => [5,5,5,0] do |s|
           if s.text.chomp!
             update_status
           else
@@ -195,34 +191,36 @@ class Aglet < Shoes
             @counter.style :stroke => (s.text.size > recommended_status_length ? red : @counter_default_stroke)
           end
         end
-      
-        # @submit = button "»", :margin => 0 do
-        #   update_status
-        # end
-      
-        @counter_default_stroke = white
+        
+        @counter_default_stroke = black
         @counter = strong ""
         para @counter, :size => 8, :margin => [0,8,0,0], :stroke => @counter_default_stroke
       end
-    
+      
       @timeline_stack = stack :height => 500, :scroll => true
-    
+      
       @footer = flow :height => 28 do
         background black
         with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
-          @collapsed = check do |c|
-            # TODO
-          end
-          m.para "collapsed"
-        
-          @public = check do |c|
-            @which_timeline = (:public if c.checked?)
-            reload_timeline
-          end
-          m.para "public"
-        
-          m.para " | ",
-            link("setup", :click => "/setup")
+          # TODO
+          # @collapsed = check do |c|
+          # end
+          # m.para "collapsed"
+          
+          # TODO
+          # used to work when reload_timeline worked.. but something changed
+          # in Shoes and now any time after the first load of timeline,
+          # the rendering gets fucked up when reload_timeline fires.
+          # using visit fixes this but fucks up other plans because 
+          # it resets instance variables, amongst perhaps other reasons.
+          # @public = check do |c|
+          #   @which_timeline = (:public if c.checked?)
+          #   # reload_timeline
+          #   # visit "/timeline"
+          # end
+          # m.para "public"
+          
+          m.para " | ", link("setup", :click => "/setup")
         end
       end
     end # clear
@@ -233,7 +231,8 @@ class Aglet < Shoes
     reset_status
     
     every 60 do
-      reload_timeline
+      # reload_timeline
+      visit "/timeline"
     end unless testing_ui?
   end
 end
