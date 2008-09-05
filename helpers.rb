@@ -88,6 +88,7 @@ module Helpers
     end
   end
   
+  # TODO something like HTML labels where we can associate them with an input
   def label(text, options = {}, &block)
     para text.upcase, { :size => 8 }.merge(options)
   end
