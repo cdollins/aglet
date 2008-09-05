@@ -64,7 +64,11 @@ class Aglet < Shoes
     
     @timeline_stack.clear { populate_timeline }
     
-    growl_latest
+    # TODO fix stupid timeline reloading so we can use this and 
+    # keep track of already growled updates with an ivar and such.
+    # something that works, one way or another..
+    # 
+    # growl_latest
   end
   
   def update_status
