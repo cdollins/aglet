@@ -12,9 +12,11 @@ You must have Shoes setup and run the app via Shoes. I am having errors with the
   cd aglet
   shoes aglet.rb
 
-You will probably note that switching to the public timeline doesn't work. And that when the app tries to reload the timeline as it sits there twittering the UI gets all kinds of fucked up. Working on that, yeknow.
+Due to suspicious hackery done to make the basic timline work, the periodic polling for new status updates also reloads the whole UI meaning that if you're entering your latest tweet for submission and the timer resets before you finish you will lose what you've typed. Shitty, yes. Sorry.
 
 Oh, and growling support is quite primitive.
+
+We're working on things, I swear! I intend to make this little toy much much cooler. Give me time!
 
 h2. Contributors
 
