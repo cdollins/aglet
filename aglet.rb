@@ -39,7 +39,7 @@ class Aglet < Shoes
   def setup
     setup_cred
     
-    clear do
+    # clear do
       background fail_to_white
       
       para "SETUP"
@@ -63,7 +63,7 @@ class Aglet < Shoes
           visit "/timeline"
         end
       end
-    end # clear
+    # end # clear
   end
   
   ###
@@ -76,7 +76,7 @@ class Aglet < Shoes
     @twitter = Twitter::Base.new *@cred
     # @friends = twitter_api { @twitter.friends.map(&:name) }
     
-    clear do
+    # clear do
       background white
       
       @form = flow :margin => [0,0,0,5] do
@@ -123,7 +123,7 @@ class Aglet < Shoes
           m.para " | ", link("setup", :click => "/setup")
         end
       end
-    end # clear
+    # end # clear
     
     ###
     
