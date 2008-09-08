@@ -29,7 +29,7 @@ module Helpers
       with_options :size => 7, :margin => [0,0,5,5] do |m|
         m.para link_to_status(status)
         # TODO extend Twitter::Status with #fail?
-        if not you?(status.user) and not status.user.screen_name == "failwhale"
+        if menu_relevent? status.user
           @menus[status.id] = m.para(
             link_to_reply(status.user), " ",
             link_to_direct(status.user)
@@ -40,8 +40,16 @@ module Helpers
     end
   end
   
+  def menu_relevent?(user)
+    not you?(user) and not failwhale?(user)
+  end
+  
   def you?(user)
     @cred[0] == user.screen_name
+  end
+  
+  def failwhale?(user)
+    user.screen_name == "failwhale"
   end
   
   def avatar_for(user)
@@ -52,6 +60,8 @@ module Helpers
     error e.message
     fail_whale
   end
+  
+  ###
   
   def image(path, opts = {})
     # scaling - http://article.gmane.org/gmane.comp.lib.shoes/1384/match=scaling+images
@@ -95,6 +105,9 @@ module Helpers
   
   ###
   
+  # TODO this breaks if you refer to @user posessively e.g. @user's stuff.
+  # Problem is related to the very simple Regexp used to break the 
+  # status text into tokens in the first place, see :autolink
   def at_pattern
     "[^\s!?.]+"
   end
