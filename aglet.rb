@@ -25,6 +25,7 @@ class Aglet < Shoes
   
   ### TODO move all this timeline handling stuff out somewhere else
   
+  # TODO this method smells funny, can probably be cleaned up
   def load_timeline
     @timeline = if @which_timeline
       load_timeline_from_api @which_timeline
@@ -45,6 +46,8 @@ class Aglet < Shoes
     
     @timeline = @timeline.first(10)
     
+    @timeline = [fail_status] + load_timeline_from_cache if @timeline.empty?
+    
     update_fixture_file @timeline
   end
   
@@ -58,16 +61,9 @@ class Aglet < Shoes
   
   def reload_timeline
     load_timeline
-    
-    # TODO move to load_timeline ?
-    @timeline = [fail_status] + load_timeline_from_cache if @timeline.empty?
-    
     @timeline_stack.clear { populate_timeline }
     
-    # TODO fix stupid timeline reloading so we can use this and 
-    # keep track of already growled updates with an ivar and such.
-    # something that works, one way or another..
-    # 
+    # TODO fix this
     # growl_latest
   end
   
@@ -82,12 +78,12 @@ class Aglet < Shoes
       
       timeline = [status] + @timeline[0..-2]
       update_fixture_file timeline
-      # reload_timeline
-      visit "/timeline"
+      reload_timeline
+      # visit "/timeline"
     else
       @new_status = twitter_api { @twitter.update @status.text }
-      # reload_timeline
-      visit "/timeline"
+      reload_timeline
+      # visit "/timeline"
     end
     
     reset_status
@@ -111,7 +107,7 @@ class Aglet < Shoes
         unless @last_user and @last_user.id == @current_user.id
           stack :width => 45 do
             avatar_for status.user
-            para link_to_profile(status.user), :size => 8, :align => "right", :margin => [0,0,5,0]
+            para link_to_profile(status.user), :size => 8, :align => "right", :margin => [0,0,5,5]
           end
         end
       end
@@ -134,6 +130,7 @@ class Aglet < Shoes
   end
   
   def setup_cred
+    return if @cred
     @cred_path = File.expand_path "~/.aglet_cred"
     @cred = File.exist?(@cred_path) ? File.readlines(@cred_path).map(&:strip) : []
   end
@@ -181,9 +178,6 @@ class Aglet < Shoes
     clear do
       background white
       
-      # Longer entries will be published in full but truncated for mobile devices.
-      recommended_status_length = 140
-      
       @form = flow :margin => [0,0,0,5] do
         background fail_to_white
         
@@ -192,7 +186,7 @@ class Aglet < Shoes
             update_status
           else
             @counter.text = (size = s.text.size).zero? ? "" : size
-            @counter.style :stroke => (s.text.size > recommended_status_length ? red : @counter_default_stroke)
+            @counter.style :stroke => (s.text.size > 140 ? red : @counter_default_stroke)
           end
         end
         
@@ -211,18 +205,19 @@ class Aglet < Shoes
           # end
           # m.para "collapsed"
           
-          # TODO
-          # used to work when reload_timeline worked.. but something changed
-          # in Shoes and now any time after the first load of timeline,
-          # the rendering gets fucked up when reload_timeline fires.
-          # using visit fixes this but fucks up other plans because 
-          # it resets instance variables, amongst perhaps other reasons.
-          # @public = check do |c|
-          #   @which_timeline = (:public if c.checked?)
-          #   # reload_timeline
-          #   # visit "/timeline"
-          # end
-          # m.para "public"
+          # XXX
+          # This used to work. Something changed in Shoes and now any 
+          # time after the first load of timeline,
+          # the rendering gets fucked up when :reload_timeline fires.
+          # using :visit fixes this but fucks up other plans
+          # because it resets instance variables, which is a 
+          # problem for how the @public check works.
+          @public = check do |c|
+            @which_timeline = (:public if c.checked?)
+            reload_timeline
+            # visit "/timeline"
+          end
+          m.para "public"
           
           m.para " | ", link("setup", :click => "/setup")
         end
@@ -235,8 +230,8 @@ class Aglet < Shoes
     reset_status
     
     every 60 do
-      # reload_timeline
-      visit "/timeline"
+      reload_timeline
+      # visit "/timeline"
     end unless testing_ui?
   end
 end
