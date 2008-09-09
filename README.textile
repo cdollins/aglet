@@ -15,6 +15,9 @@ h2. Known bugs of some significance
   * When submitting a new status update, you might not immediately see it appear
   in your timeline and the status input may not clear itself. Give it a minute.
   Often the status submitted fine.
+  * Links for items near the end of the timeline might not have their active 
+  hit area lined up correctly. This is a Shoes problem that at least affects
+  OS X.
   
 I of course intend to deal with these issues in time!
 
