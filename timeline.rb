@@ -20,9 +20,14 @@ module Timeline
     
     @timeline = @timeline.first(10)
     
-    @timeline = [fail_status] + load_timeline_from_cache if @timeline.empty?
-    
-    update_fixture_file @timeline
+    if @timeline.empty?
+      # Twitter is over capacity
+      @timeline = [fail_status] + load_timeline_from_cache
+    else
+      # Need to make sure to do this only when Twitter is not 
+      # over capacity so we don't dump failwhale statuses into the cache.
+      update_fixture_file @timeline
+    end
   end
   
   def load_timeline_from_api(which = :friends)
