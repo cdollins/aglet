@@ -6,17 +6,9 @@ Hallo. I was using Tweetr, one of many Twitter clients built on AIR. But it anno
 
 h2. Installation and Setup
 
-You must have Shoes setup and run the app via Shoes. I am having errors with the packaged version of the app, at least on OS X. So, for now you need to clone a copy of the repo and run aglet.rb with the shoes command or Shoes.app.
-  
-  git clone git://github.com/greatseth/aglet.git
-  cd aglet
-  shoes aglet.rb
+You must have Shoes setup and run the app via Shoes. Currently, I recommend running edge Shoes as that's what I do and I'm not well aware of the state of various releases. Visit "http://code.whytheluckystiff.net/shoes/wiki/BuildingShoes":http://code.whytheluckystiff.net/shoes/wiki/BuildingShoes for help installing on your platform.
 
-Due to suspicious hackery done to make the basic timline work, the periodic polling for new status updates also reloads the whole UI meaning that if you're entering your latest tweet for submission and the timer resets before you finish you will lose what you've typed. Shitty, yes. Sorry.
-
-Oh, and growling support is quite primitive.
-
-We're working on things, I swear! I intend to make this little toy much much cooler. Give me time!
+Shoes has the ability to create packages you can just grab and run on various platforms, but I had trouble with that (on OS X, at least). I'll continue to work on this, so stay tuned!
 
 h2. Contributors
 
