@@ -21,6 +21,10 @@ h2. Known bugs of some significance
   
 I of course intend to deal with these issues in time!
 
+h2. Upcoming features
+
+See the TODO file. Feel free to contact me with requests.
+
 h2. Contributors
 
   * "Seth Thomas Rasmussen":http://greatseth.com "http://greatseth.com":http://greatseth.com
