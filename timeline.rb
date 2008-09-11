@@ -24,6 +24,9 @@ module Timeline
     
     if @timeline.empty?
       # Twitter is over capacity
+      if @new_status
+        fail_status.text << " Your update was received and should show up as soon as Twitter resumes service."
+      end
       @timeline = [fail_status] + load_timeline_from_cache
     else
       # Need to make sure to do this only when Twitter is not 
