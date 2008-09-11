@@ -4,6 +4,7 @@ module Timeline
     @timeline = if @which_timeline
       load_timeline_from_api @which_timeline
     elsif @new_status
+      # TODO need some better handling of failwhale here
       timeline = load_timeline_from_api
       if timeline.map(&:id).include?(@new_status.id)
         @new_status = nil
