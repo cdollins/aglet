@@ -41,9 +41,7 @@ module Timeline
   def reload_timeline
     load_timeline
     @timeline_stack.clear { populate_timeline }
-    
-    # TODO fix this
-    # growl_latest
+    growl_latest
   end
   
   def update_status

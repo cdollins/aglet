@@ -11,20 +11,21 @@ module Grr
   GROWL_LIMIT = 4
   
   def growl_latest
-    statuses = @timeline.select do |s|
-      # XXX Apparently not always an ID? wtf?
-      @latest_growl ? (s.id && s.id > @latest_growl.id) : true
+    new_statuses = statuses = if @latest_growl
+      @timeline.select { |s| s.id > @latest_growl.id }
+    else
+      @timeline
     end
     
-    too_many = statuses.size > GROWL_LIMIT
-    
-    statuses = statuses[0..(GROWL_LIMIT - 1)] if too_many
+    if too_many = statuses.size > GROWL_LIMIT
+      statuses = statuses[0..(GROWL_LIMIT - 1)]
+    end
     
     statuses.each { |s| growl s.text, s.user.screen_name }
     
-    growl "You have #{statuses.size - GROWL_LIMIT} more new updates!" if too_many
+    growl "You have #{new_statuses.size - GROWL_LIMIT} more new updates!" if too_many
     
-    @latest_growl = statuses.last
+    @latest_growl = statuses.first if new_statuses.any?
   end
   
   def growl(message, heading = "Aglet")
