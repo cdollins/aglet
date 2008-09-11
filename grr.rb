@@ -12,9 +12,11 @@ module Grr
   
   def growl_latest
     new_statuses = statuses = if @latest_growl
-      @timeline.select { |s| s.id > @latest_growl.id }
+      @timeline.select do |s|
+        not failwhale?(s.user) and s.id > @latest_growl.id
+      end
     else
-      @timeline
+      @timeline.reject { |s| failwhale? s.user }
     end
     
     if too_many = statuses.size > GROWL_LIMIT
