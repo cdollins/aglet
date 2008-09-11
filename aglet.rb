@@ -80,7 +80,7 @@ class Aglet < Shoes
       background fail_to_white
       
       @status = edit_box :width => -(10 + gutter), :height => 35, :margin => [5,5,5,0] do |s|
-        if s.text.chomp!
+        if s.text.sub!("\n", "")
           update_status
         else
           @counter.text = (size = s.text.size).zero? ? "" : size
