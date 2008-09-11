@@ -27,7 +27,7 @@ module Helpers
   def menu_for(status)
     flow :margin => [5,0,0,0] do
       with_options :size => 7, :margin => [0,0,5,5] do |m|
-        m.para link_to_status(status)
+        m.para link_to_status(status) unless failwhale? status.user
         # TODO extend Twitter::Status with #fail?
         if menu_relevent? status.user
           @menus[status.id] = m.para(

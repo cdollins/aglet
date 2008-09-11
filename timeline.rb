@@ -5,11 +5,12 @@ module Timeline
       load_timeline_from_api @which_timeline
     elsif @new_status
       # TODO need some better handling of failwhale here
-      timeline = load_timeline_from_api
-      if timeline.map(&:id).include?(@new_status.id)
-        @new_status = nil
-      else
-        timeline = [@new_status] + timeline
+      if timeline = load_timeline_from_api
+        if timeline.map(&:id).include?(@new_status.id)
+          @new_status = nil
+        else
+          timeline.unshift @new_status
+        end
       end
       timeline
     elsif testing_ui?
@@ -85,7 +86,8 @@ module Timeline
         unless @last_user and @last_user.id == @current_user.id
           stack :width => 45 do
             avatar_for status.user
-            para link_to_profile(status.user), :size => 8, :align => "right", :margin => [0,0,5,5]
+            para failwhale?(status.user) ? status.user.screen_name : link_to_profile(status.user),
+              :size => 8, :align => "right", :margin => [0,0,5,5]
           end
         end
       end
