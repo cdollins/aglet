@@ -39,31 +39,29 @@ class Aglet < Shoes
   def setup
     setup_cred
     
-    # clear do
-      background fail_to_white
+    background fail_to_white
+    
+    para "SETUP"
+    
+    stack :margin_bottom => 5 do
+      label "username"
+      @username = edit_line @cred.first
       
-      para "SETUP"
-      
-      stack :margin_bottom => 5 do
-        label "username"
-        @username = edit_line @cred.first
-        
-        label "password"
-        @password = password_line @cred.last
+      label "password"
+      @password = password_line @cred.last
+    end
+    
+    flow do
+      button "save", :margin_right => 5 do
+        File.open(@cred_path, "w+") { |f| f.puts @username.text, @password.password_text }
+        alert "Thank you, this info is now stored at #{@cred_path}"
+        visit "/timeline"
       end
       
-      flow do
-        button "save", :margin_right => 5 do
-          File.open(@cred_path, "w+") { |f| f.puts @username.text, @password.password_text }
-          alert "Thank you, this info is now stored at #{@cred_path}"
-          visit "/timeline"
-        end
-        
-        button "cancel" do
-          visit "/timeline"
-        end
+      button "cancel" do
+        visit "/timeline"
       end
-    # end # clear
+    end
   end
   
   ###
@@ -76,54 +74,51 @@ class Aglet < Shoes
     @twitter = Twitter::Base.new *@cred
     # @friends = twitter_api { @twitter.friends.map(&:name) }
     
-    # clear do
-      background white
+    background white
+    
+    @form = flow :margin => [0,0,0,5] do
+      background fail_to_white
       
-      @form = flow :margin => [0,0,0,5] do
-        background fail_to_white
-        
-        @status = edit_box :width => -(10 + gutter), :height => 35, :margin => [5,5,5,0] do |s|
-          if s.text.chomp!
-            update_status
-          else
-            @counter.text = (size = s.text.size).zero? ? "" : size
-            @counter.style :stroke => (s.text.size > 140 ? red : @counter_default_stroke)
-          end
-        end
-        
-        @counter_default_stroke = black
-        @counter = strong ""
-        para @counter, :size => 8, :margin => [0,8,0,0], :stroke => @counter_default_stroke
-      end
-      
-      @timeline_stack = stack :height => 500, :scroll => true
-      
-      @footer = flow :height => 28 do
-        background black
-        with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
-          # TODO
-          # @collapsed = check do |c|
-          # end
-          # m.para "collapsed"
-          
-          # XXX
-          # This used to work. Something changed in Shoes and now any 
-          # time after the first load of timeline,
-          # the rendering gets fucked up when :reload_timeline fires.
-          # using :visit fixes this but fucks up other plans
-          # because it resets instance variables, which is a 
-          # problem for how the @public check works.
-          @public = check do |c|
-            @which_timeline = (:public if c.checked?)
-            reload_timeline
-            # visit "/timeline"
-          end
-          m.para "public"
-          
-          m.para " | ", link("setup", :click => "/setup")
+      @status = edit_box :width => -(10 + gutter), :height => 35, :margin => [5,5,5,0] do |s|
+        if s.text.chomp!
+          update_status
+        else
+          @counter.text = (size = s.text.size).zero? ? "" : size
+          @counter.style :stroke => (s.text.size > 140 ? red : @counter_default_stroke)
         end
       end
-    # end # clear
+      
+      @counter_default_stroke = black
+      @counter = strong ""
+      para @counter, :size => 8, :margin => [0,8,0,0], :stroke => @counter_default_stroke
+    end
+    
+    @timeline_stack = stack :height => 500, :scroll => true
+    
+    @footer = flow :height => 28 do
+      background black
+      with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
+        # TODO
+        # @collapsed = check do |c|
+        # end
+        # m.para "collapsed"
+        
+        # XXX
+        # This used to work. Something changed in Shoes and now any 
+        # time after the first load of timeline,
+        # the rendering gets fucked up when :reload_timeline fires.
+        # using :visit fixes this but fucks up other plans
+        # because it resets instance variables, which is a 
+        # problem for how the @public check works.
+        @public = check do |c|
+          @which_timeline = (:public if c.checked?)
+          reload_timeline
+        end
+        m.para "public"
+        
+        m.para " | ", link("setup", :click => "/setup")
+      end
+    end
     
     ###
     
@@ -132,7 +127,6 @@ class Aglet < Shoes
     
     every 60 do
       reload_timeline
-      # visit "/timeline"
     end unless testing_ui?
   end
 end

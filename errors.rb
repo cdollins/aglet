@@ -46,15 +46,4 @@ module Errors
     image "whale.png",
       :width => 45, :height => 45, :margin => 5
   end
-  
-  # Assuming that the maintenance page is up..
-  def maintenance_message
-    para *Hpricot(timeout { open("http://twitter.com") }).at("#content").
-      to_s.scan(/>([^<]+)</).flatten. # XXX poor man's "get all descendant text nodes"
-      reject { |x| x =~ /^\s*$/ }.    # except stuff that is just whitespace
-      map { |x| x.squeeze(" ").strip }.join(" ")
-  rescue Timeout::Error, OpenURI::HTTPError
-    para "Twitter is down down down, probably just over capacity right now. ",
-      "Try again soon!"
-  end
 end
