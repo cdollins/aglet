@@ -61,11 +61,9 @@ module Timeline
       timeline = [status] + @timeline[0..-2]
       update_fixture_file timeline
       reload_timeline
-      # visit "/timeline"
     else
       @new_status = twitter_api { @twitter.update @status.text }
       reload_timeline
-      # visit "/timeline"
     end
     
     reset_status
