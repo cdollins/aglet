@@ -130,7 +130,11 @@ module Helpers
   # A @username token might be grabbed with an attached piece of punctuation or similar
   # when parsing the status text for linkable tokens.
   def username_from(at_token)
-    at_token[1..-1][Regexp.new(at_pattern)]
+    # TODO sub! here is hack for referring to @ users posessively
+    # e.g. going to the bar for @foobar's birthday
+    # Adding ' to the at_pattern generically means it wont match right
+    # for autolink recognition right now.
+    at_token[1..-1][Regexp.new(at_pattern.sub!("]", "']"))]
   end
   
   ###
