@@ -108,6 +108,9 @@ module Helpers
   # TODO this breaks if you refer to @user posessively e.g. @user's stuff.
   # Problem is related to the very simple Regexp used to break the 
   # status text into tokens in the first place, see :autolink
+  #
+  # It also breaks if you ahve something like an ellipsis after the username.
+  # Need more smarter!!
   def at_pattern
     "[^\s!?.]+"
   end
