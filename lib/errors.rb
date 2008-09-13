@@ -17,7 +17,7 @@ module Errors
   
   def twitter_down!
     background fail_whale_orange
-    image "whale.png", :width => 1.0, :height => 200
+    image fail_whale_src, :width => 1.0, :height => 200
     para "Too many tweets!", :align => "center"
     para "Sorry, Twitter is over capacity. Wait, though, and ",
       "the timeline will reload as soon as it can.", :align => "center"
@@ -33,7 +33,7 @@ module Errors
   
   def fail_user
     Twitter::User.new do |u|
-      u.profile_image_url = "whale.png"
+      u.profile_image_url = fail_whale_src
       u.name = "failwhale"
       u.screen_name = "failwhale"
       u.location = "an octopuses garden, in the shade"
@@ -43,7 +43,10 @@ module Errors
   end
   
   def fail_whale
-    image "whale.png",
-      :width => 45, :height => 45, :margin => 5
+    image fail_whale_src, :width => 45, :height => 45, :margin => 5
+  end
+  
+  def fail_whale_src
+    "images/whale.png"
   end
 end

@@ -8,12 +8,12 @@ timeout
 htmlentities
 twitter
 
-dev
-errors
-colors
-helpers
-grr
-timeline
+lib/dev
+lib/errors
+lib/colors
+lib/helpers
+lib/grr
+lib/timeline
 ).each { |x| require x }
 
 class Aglet < Shoes
