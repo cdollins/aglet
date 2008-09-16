@@ -71,7 +71,6 @@ module Timeline
   
   # Layout for timeline
   def populate_timeline
-    @menus = {}
     @timeline.each do |status|
       @current_user = status.user
       
@@ -79,16 +78,28 @@ module Timeline
         zebra_stripe gray(0.9)
         
         stack :width => -(45 + gutter) do
+          # TODO imagesize() doesn't work with URLs so this 
+          # is sloppy right now
+          # if twitpic = status.text[%r{http://(www\.)?twitpic\.com/[^\s]+}]
+          #   image "http://twitpic.com" + Hpricot(open(twitpic)).at('#pic')[:src], :width => 150
+          # end
+          
           # para autolink(@htmlentities.decode(status.text)), :size => 9, :margin => 5
           para autolink(status.text), :size => 9, :margin => 5
+          
           menu_for status
         end
         
         unless @last_user and @last_user.id == @current_user.id
           stack :width => 45 do
             avatar_for status.user
-            para failwhale?(status.user) ? status.user.screen_name : link_to_profile(status.user),
-              :size => 8, :align => "right", :margin => [0,0,5,5]
+            with_options :align => "right" do |r|
+              r.para failwhale?(status.user) ? status.user.screen_name : link_to_profile(status.user),
+                :size => 8, :margin => [0,0,5,3]
+              if unfollow_relevant? status.user
+                r.para link_to_unfollow(status.user), :size => 7, :margin => [0,0,5,5]
+              end
+            end
           end
         end
       end
