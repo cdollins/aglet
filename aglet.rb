@@ -48,7 +48,7 @@ class Aglet < Shoes
       @username = edit_line @cred.first
       
       label "password"
-      @password = password_line @cred.last
+      @password = password_line
     end
     
     flow do
