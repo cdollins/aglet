@@ -25,6 +25,14 @@ module Helpers
   def link_to_unfollow(user)
     link "unfollow" do
       @twitter.destroy_friendship user.screen_name
+      reload_timeline
+    end
+  end
+  
+  def link_to_destroy(status)
+    link "destroy" do
+      @twitter.destroy status.id
+      reload_timeline
     end
   end
   
@@ -34,25 +42,29 @@ module Helpers
     flow :margin => [5,0,0,0] do
       with_options :size => 7, :margin => [0,0,5,5] do |m|
         m.para link_to_status(status)  unless failwhale? status.user
-        m.para *menu_items_for(status) if menu_relevent? status.user
+        m.para *menu_items_for(status)
       end
     end
   end
   
   def menu_items_for(status)
-    items = [link_to_reply(status.user), " ", link_to_direct(status.user)]
-    # items.concat [" ", link_to_delete(status)] if you? status.user
+    items = []
+    
+    if not you?(status.user) and not failwhale?(status.user)
+      items.concat [link_to_reply(status.user), " ", link_to_direct(status.user)]
+    end
+    
+    if you? status.user
+      items.concat [" ", link_to_destroy(status)]
+    end
+    
+    items.shift if items.first == " "
+    
     items
   end
   
   def unfollow_relevant?(user)
     @which_timeline != :public and not you?(user) and not failwhale?(user)
-  end
-  
-  # TODO perhaps rename, as this logic is duplicated in unfollow_relevant?
-  # but the semantics of menu_relevent? don't quite fit
-  def menu_relevent?(user)
-    not you?(user) and not failwhale?(user)
   end
   
   def you?(user)
