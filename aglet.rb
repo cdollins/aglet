@@ -103,13 +103,6 @@ class Aglet < Shoes
         # end
         # m.para "collapsed"
         
-        # XXX
-        # This used to work. Something changed in Shoes and now any 
-        # time after the first load of timeline,
-        # the rendering gets fucked up when :reload_timeline fires.
-        # using :visit fixes this but fucks up other plans
-        # because it resets instance variables, which is a 
-        # problem for how the @public check works.
         @public = check do |c|
           @which_timeline = (:public if c.checked?)
           reload_timeline
