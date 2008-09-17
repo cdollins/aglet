@@ -48,12 +48,12 @@ class Aglet < Shoes
       @username = edit_line @cred.first
       
       label "password"
-      @password = password_line
+      @password = edit_line "", :secret => true
     end
     
     flow do
       button "save", :margin_right => 5 do
-        File.open(@cred_path, "w+") { |f| f.puts @username.text, @password.password_text }
+        File.open(@cred_path, "w+") { |f| f.puts @username.text, @password.text }
         alert "Thank you, this info is now stored at #{@cred_path}"
         visit "/timeline"
       end

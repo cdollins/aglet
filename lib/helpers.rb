@@ -110,25 +110,6 @@ module Helpers
     end
   end
   
-  # XXX hax. :edit_line is apparently supposed to support a :secret => true option,
-  # but currently this does not work. These hax work great if you don't make any mistakes
-  # while entering your value, but if you have to backspace it won't save the value right.
-  def password_line(options = {})
-    edit_line "", options do |pw|
-      def pw.password_text
-        @password_text ||= ""
-      end
-      
-      # if pw.text[-1] == "*"
-      #   pw.password_text = pw.password_text[0..-1]
-      # else
-        pw.password_text << pw.text[-1]
-      # end
-      
-      pw.text = "*" * pw.text.size
-    end
-  end
-  
   # TODO something like HTML labels where we can associate them with an input
   def label(text, options = {}, &block)
     para text.upcase, { :size => 8 }.merge(options)
