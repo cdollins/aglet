@@ -64,7 +64,7 @@ module Helpers
   end
   
   def unfollow_relevant?(user)
-    @which_timeline != :public and not you?(user) and not failwhale?(user)
+    (@which_timeline != :public) and not you?(user) and not failwhale?(user)
   end
   
   def you?(user)
