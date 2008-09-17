@@ -5,7 +5,7 @@ module Dev
   end
   
   def timeline_fixture_path
-    File.join Dir.pwd, "timeline.yml"
+    File.join Dir.pwd, "#{@which_timeline || :friends}.yml"
   end
   
   # When returning true, disables all API calls and uses fixtures
