@@ -62,7 +62,7 @@ module Timeline
       update_fixture_file timeline
       reload_timeline
     else
-      @new_status = twitter_api { @twitter.update @status.text }
+      @new_status = twitter_api { @twitter.post @status.text, :source => "aglet" }
       reload_timeline
     end
     
