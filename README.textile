@@ -8,15 +8,6 @@ You must have Shoes setup and run the app via Shoes. Currently, I recommend runn
 
 Shoes has the ability to create packages you can just grab and run on various platforms, but I had trouble with that (on OS X, at least). I'll continue to work on this, so stay tuned!
 
-h2. Known bugs of some significance
-
-  * When submitting a new status update, you might not immediately see it appear
-  in your timeline and the status input may not clear itself. Give it a minute.
-  Often the status submitted fine and Twitter was just overloaded when 
-  trying to refresh the timeline. Working on smoothing this one out..
-  
-I of course intend to deal with these issues in time!
-
 h2. Upcoming features
 
 See the TODO file. Feel free to contact me with requests.
