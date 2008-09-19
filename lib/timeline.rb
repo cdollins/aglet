@@ -103,8 +103,11 @@ module Timeline
           stack :width => 45 do
             avatar_for status.user
             with_options :align => "right" do |r|
-              r.para failwhale?(status.user) ? status.user.screen_name : link_to_profile(status.user),
-                :size => 8, :margin => [0,0,5,3]
+              if not you? status.user
+                r.para failwhale?(status.user) ? status.user.screen_name : link_to_profile(status.user),
+                  :size => 8, :margin => [0,0,5,3]
+              end
+              
               if unfollow_relevant? status.user
                 r.para link_to_unfollow(status.user), :size => 7, :margin => [0,0,5,5]
               end
