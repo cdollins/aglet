@@ -58,9 +58,9 @@ module Helpers
       items.concat [link_to_reply(status.user), " ", link_to_direct(status.user)]
     end
     
-    if you? status.user
-      items.concat [" ", link_to_destroy(status)]
-    end
+    # if you? status.user
+    #   items.concat [" ", link_to_destroy(status)]
+    # end
     
     items.shift if items.first == " "
     
