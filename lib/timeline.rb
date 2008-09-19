@@ -86,12 +86,12 @@ module Timeline
           
           # para autolink(@htmlentities.decode(status.text)), :size => 9, :margin => 5
           
-          text = if @collapsed
-            status.text[0..40]
+          if @collapsed
+            text = status.text[0..40]
+            text << "..." if status.text.size > 40
           else
-            status.text
+            text = status.text
           end
-          text << "..." if status.text.size > 40
           
           para autolink(text), :size => 9, :margin => 5
           
