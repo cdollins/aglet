@@ -20,7 +20,7 @@ module Timeline
       load_timeline_from_api
     end || []
     
-    @timeline = @timeline.first(10)
+    @timeline = @timeline.first(20)
     
     if @timeline.empty?
       # Twitter is over capacity
@@ -77,7 +77,7 @@ module Timeline
       flow :margin => 0 do
         zebra_stripe gray(0.9)
         
-        stack :width => -(45 + gutter) do
+        stack :width => @collapsed ? 1.0 : -(45 + gutter) do
           # TODO imagesize() doesn't work with URLs so this 
           # is sloppy right now
           # if twitpic = status.text[%r{http://(www\.)?twitpic\.com/[^\s]+}]
@@ -85,12 +85,21 @@ module Timeline
           # end
           
           # para autolink(@htmlentities.decode(status.text)), :size => 9, :margin => 5
-          para autolink(status.text), :size => 9, :margin => 5
+          
+          text = if @collapsed
+            status.text[0..40]
+          else
+            status.text
+          end
+          text << "..." if status.text.size > 40
+          
+          para autolink(text), :size => 9, :margin => 5
           
           menu_for status
         end
         
-        unless @last_user and @last_user.id == @current_user.id
+        if not @collapsed and @last_user and @last_user.id != @current_user.id
+        # unless @last_user and @last_user.id == @current_user.id
           stack :width => 45 do
             avatar_for status.user
             with_options :align => "right" do |r|

@@ -39,16 +39,20 @@ module Helpers
   ###
   
   def menu_for(status)
-    flow :margin => [5,0,0,0] do
-      with_options :size => 7, :margin => [0,0,5,5] do |m|
-        m.para link_to_status(status)  unless failwhale? status.user
-        m.para *menu_items_for(status)
-      end
+    flow :margin => [5,0,0,@collapsed ? 5 : 0] do
+      nodes_and_opts = menu_items_for(status) + [:size => 7, :margin => [0,0,5,@collapsed ? 2 : 5]]
+      para *nodes_and_opts
     end
   end
   
   def menu_items_for(status)
     items = []
+    
+    items.concat [link_to_profile(status.user), " : "] if @collapsed
+    
+    items.concat [link_to_status(status), " "] unless failwhale? status.user
+    
+    items << ": " if @collapsed
     
     if not you?(status.user) and not failwhale?(status.user)
       items.concat [link_to_reply(status.user), " ", link_to_direct(status.user)]

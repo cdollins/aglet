@@ -99,9 +99,11 @@ class Aglet < Shoes
       background black
       with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
         # TODO
-        # @collapsed = check do |c|
-        # end
-        # m.para "collapsed"
+        @collapser = check do |c|
+          @collapsed = c.checked?
+          reload_timeline
+        end
+        m.para "collapsed"
         
         @public = check do |c|
           @which_timeline = (:public if c.checked?)
