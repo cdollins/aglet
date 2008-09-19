@@ -19,7 +19,8 @@ module Helpers
   end
   
   def link_to_profile(user)
-    link user.screen_name, :click => "http://twitter.com/#{user.screen_name}"
+    link you?(user) ? "you" : user.screen_name,
+      :click => "http://twitter.com/#{user.screen_name}"
   end
   
   def link_to_unfollow(user)
@@ -48,11 +49,13 @@ module Helpers
   def menu_items_for(status)
     items = []
     
-    items.concat [link_to_profile(status.user), " : "] if @collapsed
+    items.concat [link_to_profile(status.user)] if @collapsed
+    
+    items << " : " if @collapsed and not failwhale? status.user
     
     items.concat [link_to_status(status), " "] unless failwhale? status.user
     
-    items << ": " if @collapsed
+    items << ": " if @collapsed and not you?(status.user) and not failwhale?(status.user)
     
     if not you?(status.user) and not failwhale?(status.user)
       items.concat [link_to_reply(status.user), " ", link_to_direct(status.user)]
