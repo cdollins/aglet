@@ -31,6 +31,6 @@ module Grr
   end
   
   def growl(message, heading = "Aglet")
-    `growlnotify -a Shoes.app -n "Aglet" -m "#{message}" #{heading}`
+    `growlnotify -a Shoes.app -n "Aglet" -m "#{message.gsub '"', '\"'}" #{heading}`
   end
 end
