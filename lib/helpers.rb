@@ -75,6 +75,8 @@ module Helpers
     user.screen_name == "failwhale"
   end
   
+  ###
+  
   def avatar_for(user)
     image testing_ui? ? "images/superman_selleck.jpg" : user.profile_image_url,
       :width => 45, :height => 45, :radius => 5, :margin => [5,5,5,3]
@@ -83,8 +85,6 @@ module Helpers
     error e.message
     fail_whale
   end
-  
-  ###
   
   def image(path, opts = {})
     # scaling - http://article.gmane.org/gmane.comp.lib.shoes/1384/match=scaling+images
@@ -127,11 +127,8 @@ module Helpers
     "[^\s!?.]+"
   end
   
-  def autolink(status)
-    # XXX temp hack for bug about too much escaping :\
-    status = CGI.unescapeHTML(CGI.unescapeHTML(status))
-    
-    status.strip.scan(/(\S+)(\s+)?/).flatten.map do |token|
+  def autolink(text)
+    escaped(text).strip.scan(/(\S+)(\s+)?/).flatten.map do |token|
       case token
       when /^@#{at_pattern}$/
         link token, :click => "http://twitter.com/#{username_from token}"
@@ -140,6 +137,11 @@ module Helpers
       else token
       end
     end
+  end
+  
+  # XXX temp hack for bug about too much escaping :\
+  def escaped(text)
+    CGI.unescapeHTML(CGI.unescapeHTML(text))
   end
   
   # A @username token might be grabbed with an attached piece of punctuation or similar
