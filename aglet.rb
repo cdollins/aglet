@@ -110,7 +110,19 @@ class Aglet < Shoes
         end
         m.para "public"
         
-        m.para " | ", link("setup", :click => "/setup")
+        m.para link("setup", :click => "/setup")
+        
+        flow :width => 55,:right => 0 do
+          @pause = check do |c|
+            if c.checked?
+              @timer.stop
+            else
+              reload_timeline
+              @timer.start
+            end
+          end
+          m.para "pause"
+        end
       end
     end
     
@@ -119,7 +131,7 @@ class Aglet < Shoes
     reload_timeline
     reset_status
     
-    every 60 do
+    @timer = every 60 do
       reload_timeline
     end unless testing_ui?
   end
