@@ -148,7 +148,11 @@ module Helpers
   
   # XXX temp hack for bug about too much escaping :\
   def escaped(text)
-    CGI.unescapeHTML(CGI.unescapeHTML(text))
+    if text =~ /&#\d+;/
+      CGI.unescapeHTML(CGI.unescapeHTML(text))
+    else
+      text
+    end
   end
   
   # A @username token might be grabbed with an attached piece of punctuation or similar
