@@ -92,7 +92,7 @@ module Timeline
           else
             text = status.text
           end
-          para autolink(text), :size => 9, :margin => 5
+          para autolink(escaped(text)), :size => 9, :margin => 5
           
           menu_for status
         end

@@ -135,7 +135,7 @@ module Helpers
   end
   
   def autolink(text)
-    escaped(text).strip.scan(/(\S+)(\s+)?/).flatten.map do |token|
+    text.strip.scan(/(\S+)(\s+)?/).flatten.map do |token|
       case token
       when /^@#{at_pattern}$/
         link token, :click => "http://twitter.com/#{username_from token}"
@@ -148,7 +148,7 @@ module Helpers
   
   # XXX temp hack for bug about too much escaping :\
   def escaped(text)
-    if text =~ /&#\d+;/
+    if text =~ /&#(\d|\w)+;/
       CGI.unescapeHTML(CGI.unescapeHTML(text))
     else
       text
