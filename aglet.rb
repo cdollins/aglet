@@ -97,7 +97,7 @@ class Aglet < Shoes
     
     @footer = flow :height => 28 do
       background black
-      with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
+      with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m| # menu text styles
         @collapser = check do |c|
           @collapsed = c.checked?
           reload_timeline
@@ -110,7 +110,8 @@ class Aglet < Shoes
         end
         m.para "public"
         
-        m.para link("setup", :click => "/setup")
+        # totally awesome layout skillz!
+        m.para "          ", link("setup", :click => "/setup")
         
         flow :width => 55,:right => 0 do
           @pause = check do |c|
