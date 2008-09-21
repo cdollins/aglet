@@ -1,4 +1,6 @@
 module Timeline
+  COUNT = 30
+  
   # TODO this method smells funny, can probably be cleaned up
   def load_timeline
     @timeline = if @which_timeline
@@ -20,8 +22,6 @@ module Timeline
       load_timeline_from_api
     end || []
     
-    @timeline = @timeline.first(20)
-    
     if @timeline.empty?
       # Twitter is over capacity
       if @new_status
@@ -36,7 +36,7 @@ module Timeline
   end
   
   def load_timeline_from_api(which = :friends)
-    twitter_api { @twitter.timeline which }
+    twitter_api { @twitter.timeline which, :count => COUNT }
   end
   
   def load_timeline_from_cache
@@ -92,7 +92,6 @@ module Timeline
           else
             text = status.text
           end
-          
           para autolink(text), :size => 9, :margin => 5
           
           menu_for status

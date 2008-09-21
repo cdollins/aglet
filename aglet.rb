@@ -98,7 +98,6 @@ class Aglet < Shoes
     @footer = flow :height => 28 do
       background black
       with_options :stroke => white, :size => 8, :margin => [0,4,5,0] do |m|
-        # TODO
         @collapser = check do |c|
           @collapsed = c.checked?
           reload_timeline
