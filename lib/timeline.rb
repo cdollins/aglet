@@ -84,7 +84,8 @@ module Timeline
           #   image "http://twitpic.com" + Hpricot(open(twitpic)).at('#pic')[:src], :width => 150
           # end
           
-          # para autolink(@htmlentities.decode(status.text)), :size => 9, :margin => 5
+          
+          text = escaped text
           
           if @collapsed
             text = status.text[0..40]
@@ -92,7 +93,7 @@ module Timeline
           else
             text = status.text
           end
-          para autolink(escaped(text)), :size => 9, :margin => 5
+          para autolink(text), :size => 9, :margin => 5
           
           menu_for status
         end

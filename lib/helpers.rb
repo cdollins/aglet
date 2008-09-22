@@ -149,7 +149,9 @@ module Helpers
   # XXX temp hack for bug about too much escaping :\
   def escaped(text)
     if text =~ /&#(\d|\w)+;/
-      CGI.unescapeHTML(CGI.unescapeHTML(text))
+      # CGI.unescapeHTML(CGI.unescapeHTML(text))
+      raise "HTMLEntities not setup" unless @htmlentities
+      @htmlentities.decode(text)
     else
       text
     end
