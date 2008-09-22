@@ -115,12 +115,8 @@ class Aglet < Shoes
         
         flow :width => 55,:right => 0 do
           @pause = check do |c|
-            if c.checked?
-              @timer.stop
-            else
-              reload_timeline
-              @timer.start
-            end
+            @timer.toggle
+            reload_timeline unless c.checked?
           end
           m.para "pause"
         end
